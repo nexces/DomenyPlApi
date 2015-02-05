@@ -20,9 +20,17 @@
     "ext-curl": "*",
     "ext-json": "*"
   },
+  "require-dev": {
+    "phpunit/phpunit" : "4.*"
+  },
   "autoload": {
-    "psr-0": {
-      "DomenyPl": "src/"
+    "psr-4": {
+      "DomenyPl\\": "src/DomenyPl"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DomenyPl\\Test\\": "tests"
     }
   }
 }
