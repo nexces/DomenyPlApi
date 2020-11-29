@@ -15,10 +15,13 @@ class Api
      * @param string $strLogin
      * @param string $strPassword
      */
-    public function __construct($strLogin, $strPassword)
+    public function __construct($strLogin, $strPassword, $strApiUrl = null)
     {
         $this->strLogin = $strLogin;
         $this->strPassword = $strPassword;
+        if ($strApiUrl !== null) {
+            $this->strApiUrl = $strApiUrl;
+        }
     } // __construct
 
     /**
@@ -58,7 +61,8 @@ class Api
             throw new Exception(
                 'Curl task failed: (Error:'.curl_errno($resHandle).') "'.curl_error(
                     $resHandle
-                ).'" (URL - '.$this->getApiUrl().')'
+                ).'" (URL - '.$this->getApiUrl().')',
+                curl_errno($resHandle)
             );
         }
         return json_decode($mixResult, true);

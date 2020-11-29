@@ -16,13 +16,13 @@
     }
   ],
   "require": {
-    "php": ">=5.3.0",
+    "php": ">=7.1.0",
     "ext-curl": "*",
     "ext-json": "*"
   },
   "require-dev": {
-    "symfony/yaml" : "2.1.*",
-    "phpunit/phpunit" : "4.*"
+    "ext-sockets": "*",
+    "phpunit/phpunit" : "7.*"
   },
   "autoload": {
     "psr-4": {
