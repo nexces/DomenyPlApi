@@ -2,11 +2,14 @@
 
 namespace DomenyPl;
 
+use Exception;
+
 class Api
 {
     private $strApiUrl = 'https://api.domeny.pl/'; // URL address of API
     private $strLogin; // client login to API
     private $strPassword; // client password to API
+    private $timeout = 10; // default command timeout
     /**
      *
      * @param string $strLogin
@@ -18,14 +21,21 @@ class Api
         $this->strPassword = $strPassword;
     } // __construct
 
+    /**
+     * @param string $strCommandName
+     * @param array $arrCommandParams
+     * @return mixed
+     * @throws Exception
+     */
     public function sendCommand($strCommandName, array $arrCommandParams = array())
     {
         $resHandle = curl_init($this->getApiUrl());
         if ($resHandle === false) {
-            throw new \Exception('An error occurred during CURL call initialization.');
+            throw new Exception('An error occurred during cURL call initialization.');
         }
         curl_setopt($resHandle, CURLOPT_HEADER, false);
         curl_setopt($resHandle, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($resHandle, CURLOPT_TIMEOUT, $this->timeout);
         $arrCommandParams[ 'login' ] = $this->getApiLogin();
         $arrCommandParams[ 'password' ] = $this->getApiPassword();
         $arrCommandParams[ 'command' ] = $strCommandName;
@@ -41,11 +51,11 @@ class Api
             )
         );
         if (!$boolResult) {
-            throw new \Exception('Cant\'t assign "postfields" parameter');
+            throw new Exception('Cant\'t assign "postfields" parameter');
         }
         $mixResult = curl_exec($resHandle);
         if (curl_errno($resHandle) != 0) {
-            throw new \Exception(
+            throw new Exception(
                 'Curl task failed: (Error:'.curl_errno($resHandle).') "'.curl_error(
                     $resHandle
                 ).'" (URL - '.$this->getApiUrl().')'
@@ -83,4 +93,12 @@ class Api
     {
         return $this->strPassword;
     } // getApiPassword
+
+    /**
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = $timeout;
+    }
 }
